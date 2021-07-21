@@ -1,0 +1,33 @@
+syntax on
+set rnu
+set nu
+set encoding=utf-8
+set textwidth=79
+set formatoptions=tcqrn1
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+set laststatus=2
+set mouse-=a
+set background=dark
+
+"Searching
+set hlsearch    " highlight matches
+set incsearch   " incremental searching
+set ignorecase  " searches are case insensitive...
+set smartcase   " ... unless they contain at least one capital letter
+
+let mapleader=" "
+nmap <Leader>w :w<CR>
+nmap <Leader>q :q<CR>
+nmap <leader>sp :split<CR>
+nmap <leader>vsp :vsplit<CR>
+
+"Naviagte commands
+nmap <C-j> <C-w>j
+nmap <C-h> <C-w>h
+nmap <C-k> <C-w>k
+nmap <C-l> <C-w>l
+
+:imap ii <Esc>
