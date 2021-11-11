@@ -4,7 +4,7 @@ syntax enable
 set rnu
 set nu
 set numberwidth=1
-set clipboard=unnamed
+set clipboard=unnamed 
 set showcmd
 set ruler
 set cursorline
@@ -19,7 +19,6 @@ filetype plugin indent on
 
 " Automatically wrap text that extends beyond the screen length.
 set wrap
-
 
 " Encoding
 set encoding=utf-8
@@ -65,14 +64,23 @@ call plug#begin('~/.vim/plugged')
   Plug 'scrooloose/syntastic'
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
-  Plug 'tpope/vim-fugitive'
   Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
   Plug 'jiangmiao/auto-pairs'
   Plug 'sheerun/vim-polyglot'
-  "Plug 'ryanoasis/vim-devicons'
+  Plug 'ryanoasis/vim-devicons'
+  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+  Plug 'Xuyuanp/nerdtree-git-plugin'
+  Plug 'tpope/vim-fugitive'
+  Plug 'shmup/vim-sql-syntax'
+  Plug 'preservim/nerdcommenter'
+  Plug 'nvim-treesitter/nvim-treesitter'
+  Plug 'nvim-treesitter/playground'
+  Plug 'dsznajder/vscode-es7-javascript-react-snippets', { 'do': 'yarn install --frozen-lockfile && yarn compile' }
+  Plug 'SirVer/ultisnips'
+  Plug 'honza/vim-snippets'
 call plug#end()
 
-let g:coc_global_extensions = [ 'coc-tsserver' ]
+let g:coc_global_extensions = [ 'coc-tsserver', 'coc-sql', 'coc-json' ]
 let g:airline_powerline_fonts = 1
 
 let g:indentLine_char = '▏'
@@ -99,6 +107,7 @@ let g:syntastic_go_checkers = ['go', 'golint', 'errcheck']
 let g:syntastic_sql_checkers = ["sql"]
 let g:loaded_syntastic_sql_sqlint_checker = 1
 let g:vim_json_syntax_conceal = 0
+
 "" Searching
 set hlsearch                    " highlight matches
 set incsearch                   " incremental searching
@@ -114,6 +123,24 @@ inoremap ' ''<Esc>i
 inoremap " ""<Esc>i
 inoremap ` ``<Esc>i
 
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+
+" Use <leader>x for convert visual selected code to snippet
+xmap <leader>x  <Plug>(coc-convert-snippet)
+
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
@@ -125,7 +152,11 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+let g:coc_snippet_next = '<tab>'
+
 inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 " shortcuts
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
@@ -141,14 +172,31 @@ nmap <Leader>w :w<CR>
 nmap <Leader>q :q<CR>
 nmap <leader>gs :CocSearch
 nmap <leader>fs :Files<CR>
-nmap <leader>sp :split<CR>
-nmap <leader>vsp :vsplit<CR>
+nmap <leader>sp :vsplit<CR>
+nmap <leader>dsp :split<CR>
 
 let &t_SI = "\e[5 q"
 let &t_EI = "\e[1 q"
 
+"Go highlight
 let g:go_highlight_structs = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
+
+"Devicons
+let g:webdevicons_enable = 1
+
+"NerdFonts
+let g:NERDTreeGitStatusUseNerdFonts = 1
+
+" Trigger configuration. You need to change this to something other than <tab> if you use one of the following:
+" - https://github.com/Valloric/YouCompleteMe
+" - https://github.com/nvim-lua/completion-nvim
+" let g:UltiSnipsExpandTrigger="<tab>"
+"let g:UltiSnipsJumpForwardTrigger="<c-b>"
+"let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+"let g:UltiSnipsEditSplit="vertical"
